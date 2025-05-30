@@ -16,20 +16,34 @@ include(cmake/variables.cmake)
 # ---- Declare library ----
 find_package(fmt CONFIG REQUIRED)
 find_package(X11 REQUIRED)
-find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
+find_package(SFML 3 REQUIRED COMPONENTS Graphics Window System)
 find_package(spdlog CONFIG REQUIRED)
 find_package(toml11 CONFIG REQUIRED)
 
 # ---- Declare executable ----
 
-add_executable(glpaper_exe src/main.cpp src/getwindow.cpp src/config.cpp src/scaling.cpp)
+add_executable(glpaper_exe
+  src/main.cpp
+  src/getwindow.cpp
+  src/config.cpp
+  src/scaling.cpp
+  src/wallpaper.cpp
+)
 add_executable(glpaper::exe ALIAS glpaper_exe)
 
 set_property(TARGET glpaper_exe PROPERTY OUTPUT_NAME glpaper)
 
 target_compile_features(glpaper_exe PRIVATE cxx_std_20)
 
-target_link_libraries(glpaper_exe PRIVATE fmt::fmt X11::X11 sfml-system sfml-network sfml-graphics sfml-window spdlog::spdlog toml11::toml11)
+target_link_libraries(glpaper_exe PRIVATE
+  fmt::fmt
+  X11::X11
+  SFML::Graphics
+  SFML::Window
+  SFML::System
+  spdlog::spdlog
+  toml11::toml11
+)
 
 # ---- Install rules ----
 
