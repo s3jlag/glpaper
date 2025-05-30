@@ -1,22 +1,20 @@
-// src/main.cpp
 #include <SFML/Graphics.hpp>
-#include <spdlog/spdlog.h>
-#include "getwindow.hpp"
-
-bool loadWallpaper(sf::RenderWindow* window); // forward declaration
+#include "wallpaper.hpp"
 
 int main() {
-    spdlog::info("starting glpaper");
+    sf::RenderWindow window(sf::VideoMode({3440, 1440}), "", sf::Style::None);
+    Wallpaper wallpaper;
+    wallpaper.load();
 
-    sf::RenderWindow* window = getRenderWindow();
-    if (!window) {
-        spdlog::error("Failed to get render window");
-        return 1;
-    }
+    while (window.isOpen()) {
+        if (auto e = window.pollEvent()) {
+            if (e->is<sf::Event::Closed>()) window.close();
+        }
 
-    if (!loadWallpaper(window)) {
-        spdlog::error("Failed to load wallpaper");
-        return 1;
+        wallpaper.update();
+        window.clear();
+        wallpaper.draw(window);
+        window.display();
     }
 
     return 0;
